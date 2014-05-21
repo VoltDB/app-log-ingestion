@@ -1,0 +1,36 @@
+<project default="jar">
+    <target name="clean">
+        <delete dir="build"/>
+        <delete dir="dist"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="build/classes"/>
+        <javac srcdir="src" classpath="lib/log4j-1.2.16.jar:lib/syslog4j-0.9.30.jar:lib/kafka_2.8.0-0.8.0.jar:lib/metrics-annotation-2.2.0.jar:lib/metrics-core-2.2.0.jar:lib/scala-library.jar" destdir="build/classes"/>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="dist"/>
+        <jar destfile="dist/ksyslogd.jar" basedir="build/classes">
+            <manifest>
+                <attribute name="Main-Class" value="ksyslogd.Ksyslogd"/>
+                <attribute name="Class-Path" value="log4j-1.2.16.jar slf4j-api-1.6.2.jar slf4j-nop-1.6.2.jar syslog4j-0.9.30.jar kafka_2.8.0-0.8.0.jar metrics-annotation-2.2.0.jar metrics-core-2.2.0.jar scala-library.jar"/>
+            </manifest>
+        </jar>
+        <copy file="lib/syslog4j-0.9.30.jar" todir="dist/" />
+        <copy file="lib/kafka_2.8.0-0.8.0.jar" todir="dist/" />
+        <copy file="lib/metrics-annotation-2.2.0.jar" todir="dist/" />
+        <copy file="lib/metrics-core-2.2.0.jar" todir="dist/" />
+        <copy file="lib/scala-library.jar" todir="dist/" />
+        <copy file="lib/log4j-1.2.16.jar" todir="dist/" />
+        <copy file="lib/slf4j-api-1.6.2.jar" todir="dist/" />
+        <copy file="lib/slf4j-nop-1.6.2.jar" todir="dist/" />
+        <copy file="lib/log4j.properties" todir="dist/" />
+    </target>
+
+    <target name="run" depends="jar">
+        <java jar="dist/ksyslogd.jar" fork="true"/>
+    </target>
+
+</project>
+

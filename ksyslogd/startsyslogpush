@@ -1,0 +1,3 @@
+#!/bin/sh
+d=`pwd`/dist/log4j.properties
+java -Dlog4j.configuration=file://$d -jar dist/ksyslogd.jar $@
