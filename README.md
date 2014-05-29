@@ -36,10 +36,10 @@ Instructions
 2. Run the ksyslogd server
 
     cd ksyslogd
-    # Get syslog4j-0.9.30.jar and copy it under lib directory
-    # Make sure that machine where ksyslogd is going to run is getting syslog forwarded on port 1514
-    ant jar
-    ./startsyslogpush kafka-broker (host:port) [listener-ip-for-syslog-events]
+    - Get syslog4j-0.9.30.jar and copy it under lib directory
+    - Make sure that machine where ksyslogd is going to run is getting syslog forwarded on port 1514
+    - ant jar
+    - ./startsyslogpush kafka-broker (host:port) [listener-ip-for-syslog-events]
 
 4. Start kafkaloader
 
