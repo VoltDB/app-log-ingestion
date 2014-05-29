@@ -75,6 +75,7 @@ public class KafkaEventHandler implements SyslogServerEventHandlerIF {
             }
             //escape all "
             msg = m.replaceAll("\"", "\"\"");
+            //Build a CSV payload to be sent to kafka
             String tt = build(event.getLevel(), event.getFacility(), event.getHost(), dt, msg);
             send(tt, event.getHost());
             logger.info("Sending: " + tt);
@@ -83,6 +84,7 @@ public class KafkaEventHandler implements SyslogServerEventHandlerIF {
         }
     }
 
+    //Build a CSV payload to be sent to kafka
     private String build(int level, int facility, String host, Date dt, String msg) {
         String df = dateFormatter.format(dt);
         StringBuilder sb = new StringBuilder();

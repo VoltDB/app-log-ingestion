@@ -11,8 +11,6 @@ CREATE TABLE events
 PARTITION TABLE events ON COLUMN event_host;
 
 CREATE INDEX event_ts_index ON events (event_date);
-CREATE INDEX event_level_index ON events (event_level);
-CREATE INDEX event_facility_index ON events (event_facility);
 
 -- Agg views
 CREATE VIEW events_by_second
