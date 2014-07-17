@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>app-log-ingestion by VoltDB</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>app-log-ingestion</h1>
+        <p></p>
+
+        <p class="view"><a href="https://github.com/VoltDB/app-log-ingestion">View the Project on GitHub <small>VoltDB/app-log-ingestion</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/VoltDB/app-log-ingestion/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/VoltDB/app-log-ingestion/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/VoltDB/app-log-ingestion">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="voltdb-example-app-log-ingestion-from-syslog-using-kafka-loader" class="anchor" href="#voltdb-example-app-log-ingestion-from-syslog-using-kafka-loader"><span class="octicon octicon-link"></span></a>VoltDB Example App: Log ingestion from syslog using Kafka loader.</h1>
+
+<h2>
+<a name="use-case" class="anchor" href="#use-case"><span class="octicon octicon-link"></span></a>Use Case</h2>
+
+<p>This application loads system logs (syslogs) forwarded to a UDP listener. The logs are pushed to configured kafka cluster.
+A kafka stream based bulkloading application then pulls and loads the log data in VoltDB.
+VoltDB is pupulated with event data and materialized view created for easy access.
+Periodically OLD log data is deleted if specified.</p>
+
+<h2>
+<a name="code-organization" class="anchor" href="#code-organization"><span class="octicon octicon-link"></span></a>Code organization</h2>
+
+<p>The code is divided into projects:</p>
+
+<ul>
+<li>"events-db": the database project, which contains the schema, stored procedures and other configurations that are compiled into a catalog and run in a VoltDB database.<br>
+</li>
+<li>"ksyslogd": a java client that listens for log data on 1514 port and pushes them to specified Kafka cluster.</li>
+<li>"nibbler": a java client that calls VoltDB and periodically deletes old events (cruft removal) This is optional step but make sure your VoltDB cluster can handle the events data ingestion.</li>
+</ul><p>See below for instructions on running these applications.  For any questions, 
+please contact <a href="mailto:fieldengineering@voltdb.com">fieldengineering@voltdb.com</a>.</p>
+
+<h2>
+<a name="pre-requisites" class="anchor" href="#pre-requisites"><span class="octicon octicon-link"></span></a>Pre-requisites</h2>
+
+<p>Before running these scripts you need to have VoltDB 4.3 (Enterprise or Community) or later installed, and you should add the voltdb-$(VERSION)/bin directory to your PATH environment variable, for example:</p>
+
+<pre><code>export PATH="$PATH:$HOME/voltdb-ent-4.3/bin"
+</code></pre>
+
+<h2>
+<a name="instructions" class="anchor" href="#instructions"><span class="octicon octicon-link"></span></a>Instructions</h2>
+
+<ol>
+<li>
+<p>Start the database (in the background)</p>
+
+<p>cd events-db
+./run.sh</p>
+</li>
+<li>
+<p>Run the ksyslogd server</p>
+
+<p>cd ksyslogd</p>
+
+<ul>
+<li>Get syslog4j-0.9.30.jar and copy it under lib directory</li>
+<li>Make sure that machine where ksyslogd is going to run is getting syslog forwarded on port 1514</li>
+<li>ant jar</li>
+<li>./startsyslogpush kafka-broker (host:port) [listener-ip-for-syslog-events]</li>
+</ul>
+</li>
+<li>
+<p>Start kafkaloader</p>
+
+<p>kafkaloader -z kafka-zookeeper -t topic events</p>
+</li>
+<li><p>Start nibbler (If you wish to delete old event data)
+cd nibbler
+./run.sh</p></li>
+<li><p>Run various queries to get event data by connecting to VoltDB server.</p></li>
+</ol><h2>
+<a name="instructions-for-running-on-a-cluster" class="anchor" href="#instructions-for-running-on-a-cluster"><span class="octicon octicon-link"></span></a>Instructions for running on a cluster</h2>
+
+<p>Take compiled catalog and run it on a cluster by setting correct deployment. Use VoltDB enterprise manager.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/VoltDB">VoltDB</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
