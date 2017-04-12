@@ -52,7 +52,3 @@ Instructions
 
 6. Run various queries to get event data by connecting to VoltDB server.
 
-Instructions for running on a cluster
--------------------------------------
-
-Take compiled catalog and run it on a cluster by setting correct deployment. Use VoltDB enterprise manager.
